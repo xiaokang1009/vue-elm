@@ -4,40 +4,43 @@
       <div class="login-header">
         <h2 class="login-logo">仿饿了么外卖</h2>
         <div class="login-header-title">
-          <a href="javascript:;" @click="isShowPhone" :class="onShowPhone">手机登录</a>
-          <a href="javascript:;" @click="isShowPwd" :class="onShowPwd">密码登录</a>
+          <a href="javascript:;" @click="loginType=true" :class="{on: loginType}">手机登录</a>
+          <a href="javascript:;" @click="loginType=false" :class="{on: !loginType}">密码登录</a>
         </div>
       </div>
       <div class="login-content">
-        <form>
-          <div :class="onShowPhone">
+        <form @submit.prevent="login">
+          <div :class="{on: loginType}">
             <section class="login-message">
-              <input type="tel" maxlength="11" placeholder="手机号">
-              <button disabled="disabled" class="get-verification">获取验证码</button>
+              <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
+              <button :disabled="!phoneRight" class="get-verification"
+                      :style="phoneRight?'color:black':''" @click.prevent="getCode">
+                {{ sendTime >= 0 ? `${sendTime}s后重新发送` : '获取验证码' }}
+              </button>
             </section>
             <section class="login-verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
             </section>
             <section class="login-hint">
               温馨提示：未注册本外卖帐号的手机号，登录时将自动注册，且代表已同意
               <a href="javascript:;">《用户服务协议》</a>
             </section>
           </div>
-          <div :class="onShowPwd">
+          <div :class="{on: !loginType}">
             <section>
               <section class="login-message">
-                <input type="text" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="text" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
               </section>
               <section class="login-verification">
-                <input type="password" minlength="6" placeholder="密码">
-                <div class="switch-button off">
-                  <div class="switch-circle"></div>
-                  <span class="switch-text">...</span>
+                <input :type="showType" minlength="6" maxlength="18" placeholder="密码" v-model="pwd">
+                <div class="switch-button off" :class="flag?'on':'off'" @click.prevent.stop="passwordIsShow(flag)">
+                  <div class="switch-circle" :class="{right:flag}"></div>
+                  <span class="switch-text">{{ flag ? 'abc' : '' }}</span>
                 </div>
               </section>
               <section class="login-message">
-                <input type="text" maxlength="11" placeholder="验证码">
-                <img class="get-verification" src="./images/captcha.svg">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
+                <img class="get-verification" src="./images/captcha.svg" alt="captcha">
               </section>
             </section>
           </div>
@@ -53,34 +56,85 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
 export default {
   data () {
     return {
-      on: 'on',
-      onShowPwd: '',
-      onShowPhone: 'on'
+      loginType: true, // 使用手机验证码登录 还是密码登录
+      sendTime: -1, // 计时的时间，默认为-1，当倒计时小于0然后再显示发送验证码
+      showType: 'password', // 密码框的type属性默认为password，可以改变为text
+      flag: false, // 显示密码和隐藏密码的标志
+      pwd: '', // 密码
+      phone: '', // 手机号
+      code: '', // 手机验证码
+      name: '', // 用户名
+      captcha: '' // 图片验证码
+    }
+  },
+  computed: {
+    phoneRight () {
+      return /^1\d{10}$/.test(this.phone)
     }
   },
   methods: {
-    isShowPhone () {
-      this.onShowPhone = this.on
-      this.onShowPwd = ''
+    //  异步获取验证码
+    getCode () {
+      if (!this.sendTime <= 0) {
+        //  显示倒计时
+        this.sendTime = 60
+        const intervalId = setInterval(() => {
+          this.sendTime < 0 && clearInterval(intervalId)
+          this.sendTime--
+        }, 1000)
+        //  发送ajax请求
+      }
     },
-    isShowPwd () {
-      this.onShowPhone = ''
-      this.onShowPwd = this.on
+    //  显示隐藏密码的方法
+    passwordIsShow (isShow) {
+      if (isShow) {
+        this.showType = 'password'
+      } else {
+        this.showType = 'text'
+      }
+      this.flag = !this.flag
+    },
+    //  登录相关的验证 以及异步登录
+    login () {
+      if (this.loginType) {
+        // 短信登录
+        // eslint-disable-next-line no-unused-vars
+        const { phoneRight, phone, code } = this
+        if (!phoneRight) {
+          // 手机号码不正确
+          MessageBox.alert('手机号码不正确', '提示')
+        } else if (!/^\d{4}$/.test(code)) {
+          // 验证码格式不对
+          MessageBox.alert('验证码格式不对', '提示')
+        }
+      } else {
+        // 密码登录
+        const { pwd, name, captcha } = this
+        if (!name && !pwd) {
+          //  用户名和密码不能为空
+          MessageBox.alert('用户名和密码不能为空', '提示')
+        } else if (!captcha) {
+          //  图形验证码不能为空
+          MessageBox.alert('图形验证码不能为空', '提示')
+        }
+      }
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import "../../common/stylus/mixin.styl"
 @import "../../common/stylus/variable.styl"
 .login
   width 100%
   height 100%
   background $bc-white-s
+
   .login-container
     padding-top 60px
     width 80%
@@ -160,12 +214,11 @@ export default {
               &.off
                 background $bc-white-s
                 .switch-text
-                  float right
+                  float left
                   color $bc-white-ssss
               &.on
                 background $blue
               >.switch-circle
-                //transform translateX(27px)
                 position absolute
                 top -1px
                 left -1px
@@ -174,8 +227,11 @@ export default {
                 border 1px solid $bc-white-ssss
                 border-radius 50%
                 background $bc-white-s
-                box-shadow 0 2px 4px 0 rgba(0,0,0,.1)
+                box-shadow 0 2px 4px 0 rgba(0, 0, 0, .1)
                 transition transform .3s
+
+                &.right
+                  transform translateX(30px)
           .login-hint
             margin-top $font-size-small
             color $font-color-gray

@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import "../../common/stylus/mixin.styl"
 @import "../../common/stylus/variable.styl"
 .header //商家首页头部
@@ -66,7 +66,8 @@ export default {
     color $bc-white-s
     transform translateY(-50%)
 
-    .icon-yonghu
+    .icon-user
+      font-size $font-size-large-sss
       color $bc-white-s
 
 </style>

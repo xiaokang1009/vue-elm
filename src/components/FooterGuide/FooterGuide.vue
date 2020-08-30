@@ -1,25 +1,25 @@
 <template>
   <!-- 使用编程时路由导航来实现路由的切换功能 -->
   <div class="footer-guide">
-    <span class="guide-item " :class="{on:'/msite'===$route.path}" @click="goOn('/msite')">
+    <span class="guide-item " :class="{on:'/msite'===$route.path}" @click.stop="goOn('/msite')">
       <span class="item-icon">
         <i class="iconfont icon-elm"></i>
       </span>
       <span>外卖</span>
     </span>
-    <span class="guide-item" :class="{on:'/search'===$route.path}" @click="goOn('/search')">
+    <span class="guide-item" :class="{on:'/search'===$route.path}" @click.stop="goOn('/search')">
       <span class="item-icon">
         <i class="iconfont icon-search"></i>
       </span>
       <span>搜索</span>
     </span>
-    <span class="guide-item" :class="{on:'/order'===$route.path}" @click="goOn('/order')">
+    <span class="guide-item" :class="{on:'/order'===$route.path}" @click.stop="goOn('/order')">
       <span class="item-icon">
         <i class="iconfont icon-order"></i>
       </span>
       <span>订单</span>
     </span>
-    <span class="guide-item" :class="{on:'/personal'===$route.path}" @click="goOn('/personal')">
+    <span class="guide-item" :class="{on:'/personal'===$route.path}" @click.prevent="goOn('/personal')">
       <span class="item-icon">
         <i class="iconfont icon-personal"></i>
       </span>
@@ -38,7 +38,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import "../../common/stylus/variable.styl"
 @import "../../common/stylus/mixin.styl"
 .footer-guide

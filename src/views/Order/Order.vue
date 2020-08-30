@@ -18,7 +18,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import "../../common/stylus/mixin.styl"
 @import "../../common/stylus/variable.styl"
   .order

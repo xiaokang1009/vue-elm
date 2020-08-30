@@ -5,15 +5,22 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 import FooterGuide from '@/components/FooterGuide/FooterGuide'
 
 export default {
+  mounted () {
+    this.getAddress()
+  },
+  methods: {
+    ...mapActions(['getAddress'])
+  },
   components: {
     FooterGuide
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
   .app
     width 100%
     height 100%
