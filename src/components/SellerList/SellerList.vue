@@ -1,7 +1,7 @@
 <template>
   <nav class="seller-content">
     <ul class="seller-list">
-      <li class="seller-li border-1px" v-for="(seller,sellerIndex) in sellerList" :key="sellerIndex">
+      <li class="seller-li border-1px" @click="$router.push('/seller')" v-for="(seller,sellerIndex) in sellerList" :key="sellerIndex">
         <a>
           <div class="seller-left">
             <img class="seller-img"
@@ -83,7 +83,7 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import "../../common/stylus/mixin.styl"
 @import "../../common/stylus/variable.styl"
 .seller-content // 内容

@@ -1,17 +1,17 @@
 <template>
   <div class="personal">
     <section class="personal-number">
-      <router-link to="/login" class="personal-link">
+      <router-link :to="userInfo._id ? '/userinfo':'/login'" class="personal-link">
         <div class="personal-image">
           <img src="https://cube.elemecdn.com/c/6b/8384f98b8dedfd87fc1450926648cjpeg.jpeg"/>
         </div>
         <div class="user-info">
-          <p class="user-info-top">登录&ensp;/&ensp;注册</p>
+          <p class="user-info-top" v-show="!userInfo.phone"> {{ userInfo.name || '登录&ensp;/&ensp;注册'}}</p>
           <P>
             <span class="user-icon">
               <i class="iconfont icon-shouji icon-mobile"></i>
             </span>
-            <span class="icon-mobile-number">暂无绑定手机号</span>
+            <span class="icon-mobile-number">{{ userInfo.phone || '暂无绑定手机号' }}</span>
           </P>
         </div>
         <span class="arrow">
@@ -22,17 +22,17 @@
     <section class="personal-info-data">
       <a href="javascript:;" class="data-list">
         <p class="money-pack">
-          <span v-if="userNotLogin" class="iconfont icon-hongbao"></span>
+          <span v-if="!userInfo._id" class="iconfont icon-hongbao"></span>
           <span v-else class="number "><b style="color:#FF5F3E;">3</b>个</span>
         </p>
         <p class="money-desc">红包</p>
       </a>
       <a href="javascript:;" class="data-list">
         <p class="money-pack">
-          <span v-if="userNotLogin" class="iconfont icon-jifen01"></span>
-          <span v-else class="number "><b style="color:#6AC20B;">0</b>个</span>
+          <span v-if="!userInfo._id" class="iconfont icon-jifen01"></span>
+          <span v-else class="number "><b style="color:#6AC20B;">300</b>个</span>
         </p>
-        <p class="money-desc">红包</p>
+        <p class="money-desc">金币</p>
       </a>
     </section>
     <!-- 列表 -->
@@ -97,14 +97,34 @@
     <section class="privacy-policy">
       <a href="javascript:;" class="prpo-go">隐私政策</a>
     </section>
+    <!-- 退出登录 -->
+    <section v-show="userInfo._id" class="logout">
+      <mt-button type="danger" size="large" @click="logout">退出登录</mt-button>
+    </section>
   </div>
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui'
+import { mapState } from 'vuex'
 export default {
-  data () {
-    return {
-      userNotLogin: true
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  methods: {
+    logout () {
+      MessageBox.confirm('确定退出吗!', {
+        confirmButtonText: '取消',
+        cancelButtonText: '确定',
+        confirmButtonHighlight: true
+      }).then(
+        action => {
+        },
+        action => {
+          // 请求退出
+          console.log('2')
+          this.$store.dispatch('logout')
+        })
     }
   }
 }
@@ -270,4 +290,7 @@ export default {
     font-size $font-size-large
     .prpo-go
       color inherit
+  .logout
+    width 90%
+    padding-left 5%
 </style>

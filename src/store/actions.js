@@ -4,12 +4,22 @@
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
-  RECEIVE_SELLER_LIST
+  RECEIVE_SELLER_LIST,
+  RECEIVE_USER_INFO,
+  RESET_USER_INFO,
+  RECEIVE_SELLER_INFO,
+  RECEIVE_SELLER_RATINGS,
+  RECEIVE_SELLER_GOODS
 } from './mutation-types'
 import {
   reqAddress,
   reqFoodCategorys,
-  reqSellerList
+  reqSellerList,
+  reqUserInfo,
+  reqLogout,
+  reqSellerGoods,
+  reqSellerInfo,
+  reqSellerRatings
 } from '@/api'
 
 export default {
@@ -24,6 +34,7 @@ export default {
       commit(RECEIVE_ADDRESS, { address })
     }
   },
+
   //  异步获取食品分类的数组
   async getCategorys ({ commit }) {
     //  异步发送ajax请求
@@ -34,6 +45,7 @@ export default {
       commit(RECEIVE_CATEGORYS, { categorys })
     }
   },
+
   //  异步获取商家列表
   async getSellerList ({ commit, state }) {
     const { latitude, longitude } = state
@@ -44,5 +56,41 @@ export default {
       const sellerList = result.data
       commit(RECEIVE_SELLER_LIST, { sellerList })
     }
+  },
+
+  // 同步保存用户信息
+  saveUserInfo ({ commit }, userInfo) {
+    commit(RECEIVE_USER_INFO, { userInfo })
+  },
+
+  // 异步获取用户session信息
+  async getUserInfo ({ commit }) {
+    const result = await reqUserInfo()
+    if (result.code === 0) {
+      const userInfo = result.data
+      commit(RECEIVE_USER_INFO, { userInfo })
+    }
+  },
+
+  // 异步退出
+  async logout ({ commit }) {
+    const result = await reqLogout()
+    result.code === 0 && commit(RESET_USER_INFO)
+  },
+
+  // 异步获取商家商品信息
+  async getSellerGoods ({ commit }) {
+    const result = await reqSellerGoods()
+    result.code === 0 && commit(RECEIVE_SELLER_GOODS, { goods: result.data })
+  },
+  // 异步获取商家评价信息
+  async getSellerRatings ({ commit }) {
+    const result = await reqSellerRatings()
+    result.code === 0 && commit(RECEIVE_SELLER_RATINGS, { ratings: result.data })
+  },
+  // 异步获取商家详情信息
+  async getSellerInfo ({ commit }) {
+    const result = await reqSellerInfo()
+    result.code === 0 && commit(RECEIVE_SELLER_INFO, { seller: result.data })
   }
 }

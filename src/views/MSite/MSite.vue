@@ -2,12 +2,12 @@
   <section class="msite">
     <!--首页头部-->
     <Header :title="address.name">
-       <span class="header-search" slot="left">
+       <router-link class="header-search" slot="left" to="/search">
         <i class="iconfont icon-sousuo"></i>
-      </span>
-      <span class="header-login" slot="right">
-        <i class="iconfont icon-dengluzhuce_huaban icon-user"></i>
-      </span>
+      </router-link>
+      <router-link class="header-login" slot="right" :to="userInfo._id ? '/userinfo':'/login'">
+        <i class="iconfont icon-user" :class="userInfo._id ? 'icon-yonghu1':'icon-dengluzhuce_huaban'"></i>
+      </router-link>
     </Header>
     <!--导航部分-->
     <nav class="msite-nav">
@@ -55,7 +55,7 @@ export default {
     this.$store.dispatch('getSellerList')
   },
   computed: {
-    ...mapState(['address', 'categorys']),
+    ...mapState(['address', 'categorys', 'userInfo']),
     categorysArr () {
       const { categorys } = this
       //  准备两个空数组

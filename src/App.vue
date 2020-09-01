@@ -11,9 +11,10 @@ import FooterGuide from '@/components/FooterGuide/FooterGuide'
 export default {
   mounted () {
     this.getAddress()
+    this.getUserInfo()
   },
   methods: {
-    ...mapActions(['getAddress'])
+    ...mapActions(['getAddress', 'getUserInfo'])
   },
   components: {
     FooterGuide
