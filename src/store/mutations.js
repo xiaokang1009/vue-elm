@@ -1,6 +1,7 @@
 /*
   直接更新state多个方法对象
  */
+import Vue from 'vue'
 import {
   RECEIVE_ADDRESS,
   RECEIVE_CATEGORYS,
@@ -9,7 +10,9 @@ import {
   RESET_USER_INFO,
   RECEIVE_SELLER_GOODS,
   RECEIVE_SELLER_INFO,
-  RECEIVE_SELLER_RATINGS
+  RECEIVE_SELLER_RATINGS,
+  DECREMENT_FOOD_COUNT,
+  INCREMENT_FOOD_COUNT
 } from './mutation-types'
 
 export default {
@@ -51,5 +54,19 @@ export default {
   // 更新商家详情信息
   [RECEIVE_SELLER_INFO] (state, { seller }) {
     state.sellerInfo = seller
+  },
+
+  // 增加商品数量
+  [INCREMENT_FOOD_COUNT] (state, { food }) {
+    if (!food.count) {
+      Vue.set(food, 'count', 1)
+    } else {
+      food.count++
+    }
+  },
+
+  // 减少商品数量
+  [DECREMENT_FOOD_COUNT] (state, { food }) {
+    food.count && food.count--
   }
 }

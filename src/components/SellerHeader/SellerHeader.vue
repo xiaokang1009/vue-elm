@@ -16,7 +16,7 @@
         <div class="seller-message">
           <span class="seller-message-detail">评价{{ sellerInfo.score }}</span>
           <span class="seller-message-detail">月售{{ sellerInfo.sellCount }}单</span>
-          <span class="seller-message-detail">饿了么专送约{{deliveryTime}}分钟</span>
+          <span class="seller-message-detail">饿了么专送约{{sellerInfo.deliveryTime}}分钟</span>
         </div>
       </div>
 
@@ -28,7 +28,7 @@
         </span>
       </div>
       <div class="discounts-right">
-        {{sellerInfo.discounts.length}}个优惠
+        {{discoutLength}}个优惠
       </div>
     </section>
     <section class="seller-header-bulletin">
@@ -105,7 +105,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['sellerInfo'])
+    ...mapState(['sellerInfo']),
+    discoutLength () {
+      return this.sellerInfo.discounts && this.sellerInfo.discounts.length
+    }
   }
 }
 </script>

@@ -16,3 +16,7 @@ export const RECEIVE_SELLER_RATINGS = 'receive_seller_ratings' // 接受商家�
 export const RECEIVE_SELLER_GOODS = 'receive_seller_goods' // 接受商家商品信息
 
 export const RECEIVE_SELLER_INFO = 'receive_seller_info' // 接受商家详情信息
+
+export const INCREMENT_FOOD_COUNT = 'increment_food_count' // 增加商品数量
+
+export const DECREMENT_FOOD_COUNT = 'decrement_food_count' // 减小商品数量

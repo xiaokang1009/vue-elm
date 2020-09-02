@@ -9,7 +9,9 @@ import {
   RESET_USER_INFO,
   RECEIVE_SELLER_INFO,
   RECEIVE_SELLER_RATINGS,
-  RECEIVE_SELLER_GOODS
+  RECEIVE_SELLER_GOODS,
+  INCREMENT_FOOD_COUNT,
+  DECREMENT_FOOD_COUNT
 } from './mutation-types'
 import {
   reqAddress,
@@ -29,10 +31,7 @@ export default {
     //  异步发送ajax请求
     const result = await reqAddress(geohash)
     //  提交一个mutation
-    if (result.code === 0) {
-      const address = result.data
-      commit(RECEIVE_ADDRESS, { address })
-    }
+    result.code === 0 && commit(RECEIVE_ADDRESS, { address: result.data })
   },
 
   //  异步获取食品分类的数组
@@ -40,10 +39,7 @@ export default {
     //  异步发送ajax请求
     const result = await reqFoodCategorys()
     //  提交一个mutation
-    if (result.code === 0) {
-      const categorys = result.data
-      commit(RECEIVE_CATEGORYS, { categorys })
-    }
+    result.code === 0 && commit(RECEIVE_CATEGORYS, { categorys: result.data })
   },
 
   //  异步获取商家列表
@@ -52,10 +48,7 @@ export default {
     //  异步发送ajax请求
     const result = await reqSellerList(latitude, longitude)
     //  提交一个mutation
-    if (result.code === 0) {
-      const sellerList = result.data
-      commit(RECEIVE_SELLER_LIST, { sellerList })
-    }
+    result.code === 0 && commit(RECEIVE_SELLER_LIST, { sellerList: result.data })
   },
 
   // 同步保存用户信息
@@ -66,10 +59,7 @@ export default {
   // 异步获取用户session信息
   async getUserInfo ({ commit }) {
     const result = await reqUserInfo()
-    if (result.code === 0) {
-      const userInfo = result.data
-      commit(RECEIVE_USER_INFO, { userInfo })
-    }
+    result.code === 0 && commit(RECEIVE_USER_INFO, { userInfo: result.data })
   },
 
   // 异步退出
@@ -79,18 +69,27 @@ export default {
   },
 
   // 异步获取商家商品信息
-  async getSellerGoods ({ commit }) {
+  async getSellerGoods ({ commit }, callback) {
     const result = await reqSellerGoods()
     result.code === 0 && commit(RECEIVE_SELLER_GOODS, { goods: result.data })
+    callback && callback()
   },
+
   // 异步获取商家评价信息
   async getSellerRatings ({ commit }) {
     const result = await reqSellerRatings()
     result.code === 0 && commit(RECEIVE_SELLER_RATINGS, { ratings: result.data })
   },
+
   // 异步获取商家详情信息
   async getSellerInfo ({ commit }) {
     const result = await reqSellerInfo()
     result.code === 0 && commit(RECEIVE_SELLER_INFO, { seller: result.data })
+  },
+
+  // 同步更新商品数量
+  updateFoodCount ({ commit }, { flag, food }) {
+    flag === true && commit(INCREMENT_FOOD_COUNT, { food })
+    flag === false && commit(DECREMENT_FOOD_COUNT, { food })
   }
 }
