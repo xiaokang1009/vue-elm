@@ -1,14 +1,15 @@
 <template>
   <div class="cartcontrol">
     <transition name="move">
-      <section class="iconfont icon-jian" v-show="food.count" @click="updateFoodCount(false)"></section>
+      <section class="iconfont icon-jian" v-show="food.count" @click.stop="updateFoodCount(false)"></section>
     </transition>
     <section class="cart-count" v-show="food.count">{{ food.count }}</section>
-    <section class="iconfont icon-jia" @click="updateFoodCount(true)"></section>
+    <section class="iconfont icon-jia" @click.stop="updateFoodCount(true)"></section>
   </div>
 </template>
 
 <script>
+
 export default {
   props: {
     food: Object

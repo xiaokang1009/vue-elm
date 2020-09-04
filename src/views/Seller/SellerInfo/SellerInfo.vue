@@ -1,6 +1,6 @@
 <template>
   <div>
-    SellerInfo
+    完善中
   </div>
 </template>
 
@@ -8,6 +8,6 @@
 export default {}
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 </style>

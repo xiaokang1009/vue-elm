@@ -1,8 +1,8 @@
 <template>
-  <header class="seller-header">
+  <div class="seller-header">
     <div class="seller-banner"
          :style="{ backgroundImage: `url(${sellerInfo.bgImg})` }">
-      <a class="back">
+      <a class="back" @click="$router.replace('/msite')">
         <i class="iconfont icon-jiantouzuo"></i>
       </a>
     </div>
@@ -75,7 +75,7 @@
         <div class="brief-modal-cover" @click="sellerShow=false"></div>
       </section>
     </transition>
-    <transition name="fade">
+    <transition name="move">
       <section class="activity-sheet" v-show="supportIsShow">
         <div class="activity-sheet-content">
           <h2 class="activity-sheet-title">优惠活动</h2>
@@ -92,7 +92,7 @@
         <div class="activity-sheet-cover" @click="supportIsShow=false"></div>
       </section>
     </transition>
-  </header>
+  </div>
 </template>
 
 <script>
@@ -126,7 +126,7 @@ export default {
     background-size cover
     background-repeat no-repeat
     background-position 50%
-    height 100px
+    height 50px
     padding 5px 10px
     position relative
     &::before
@@ -158,11 +158,11 @@ export default {
       position: absolute;
       top: 0;
       left: 50%;
-      width: 75px
-      height: 75px
+      width: 66px
+      height: 66px
       border-radius: 2px
       margin-left -33px
-      margin-top -15%
+      margin-top -12%
     .header-content
       flex 1
       width 72%
@@ -217,7 +217,8 @@ export default {
         margin-left 10px
         border 1px solid rgb(255, 201, 193)
         color rgb(255, 75, 51)
-        padding 2px
+        padding 0 2px
+        padding-top 3px
         font-size $font-size-normal
     .discounts-right
       width 50px
@@ -237,7 +238,7 @@ export default {
         right -3px
   .seller-header-bulletin
     background #fff
-    padding 5px 7px
+    padding 5px 15px
     font-size 11px
     color #b3b3b3
     margin 0 25px 5px 25px
@@ -336,7 +337,12 @@ export default {
     left 0
     width 100%
     height 100%
-    z-index 99
+    z-index 400
+    opacity 1
+    &.move-enter-active,&.move-leave-active
+      transition all .5s
+    &.move-enter,&.move-leave-to
+      opacity 0
     .activity-sheet-content
       position absolute
       background-color #f5f5f5
@@ -380,11 +386,13 @@ export default {
         height 25px
         > span
           font-size 20px
+
     .activity-sheet-cover
       position absolute
       width 100%
       height 100%
       top 0
       left 0
+      opacity 0.4
       background-color rgba(0, 0, 0,.5)
 </style>

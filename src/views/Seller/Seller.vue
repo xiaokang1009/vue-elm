@@ -12,7 +12,9 @@
         <router-link to="/seller/info">商家</router-link>
       </div>
     </nav>
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
@@ -33,11 +35,12 @@ export default {
 @import "../../common/stylus/variable.styl"
 .seller
   background $bc-white-s
+  width 100%
   .tab
     display flex
     height 40px
     line-height 40px
-    bottom-border-1px(rgba(7, 17, 27, 0.1))
+    top-border-1px(rgba(7, 17, 27, 0.1))
     .tab-item
       flex 1
       text-align center

@@ -1,62 +1,72 @@
 <template>
-  <div class="goods">
-    <!-- 左边菜单列表 -->
-    <section class="menu-wrapper" ref="menuWrapper">
-      <ul>
-        <li class="menu-item" @click="clickMenuItem(index)" :class="{current: index === currentIndex}" v-for="(good,index) in sellerGoods" :key="index">
+  <div>
+    <div class="goods">
+      <!-- 左边菜单列表 -->
+      <section class="menu-wrapper" ref="menuWrapper">
+        <ul>
+          <li class="menu-item" @click="clickMenuItem(index)" :class="{current: index === currentIndex}" v-for="(good,index) in sellerGoods" :key="index">
           <span class="text bottom-border-1px">
             <img class="icon" :src="good.icon" v-show="good.icon">
             {{ good.name }}
           </span>
-        </li>
-      </ul>
-    </section>
-    <!-- 右边食品列表 -->
-    <section ref="foodsWrapper" class="foods-wrapper">
-      <ul ref="foodsUl">
-        <li class="food-list-hook" v-for="(good,index) in sellerGoods" :key="index">
-          <h1 class="title">{{good.name}}</h1>
-          <ul>
-            <li class="food-item bottom-bodrder-1px" v-for="(food,index) in good.foods" :key="index">
-              <div class="icon">
-                <img width="95" height="95" :src="food.img"/>
-              </div>
-              <div class="content">
-                <p class="name-title">
-                  <span class="name ellipsis">{{food.name}}</span>
-                </p>
-                <p class="descInfo ellipsis">{{ food.info }}</p>
-                <p class="extra">
-                  <span class="count">月售{{food.sellCount}}份</span>
-                  <span>好评率{{ food.rating }}%</span>
-                </p>
-                <section class="price-cartControl">
-                  <div class="price">
-                    <span class="now">￥{{ food.price }}</span>
-                    <span class="old" v-show="food.oldPrice">￥{{ food.oldPrice }}</span>
-                  </div>
-                  <div class="cartcontrol-wrapper">
-                    <cart-control :food="food"/>
-                  </div>
-                </section>
-              </div>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </section>
+          </li>
+        </ul>
+      </section>
+      <!-- 右边食品列表 -->
+      <section ref="foodsWrapper" class="foods-wrapper">
+        <ul ref="foodsUl">
+          <li class="food-list-hook"  v-for="(good,index) in sellerGoods" :key="index">
+            <h1 class="title">{{good.name}}</h1>
+            <ul>
+              <li class="food-item bottom-bodrder-1px" @click="showFood(food)" v-for="(food,index) in good.foods" :key="index">
+                <div class="icon">
+                  <img width="95" height="95" :src="food.img"/>
+                </div>
+                <div class="content">
+                  <p class="name-title">
+                    <span class="name ellipsis">{{food.name}}</span>
+                  </p>
+                  <p class="descInfo ellipsis">{{ food.info }}</p>
+                  <p class="extra">
+                    <span class="count">月售{{food.sellCount}}份</span>
+                    <span>好评率{{ food.rating }}%</span>
+                  </p>
+                  <section class="price-cartControl">
+                    <div class="price">
+                      <span class="now">￥{{ food.price }}</span>
+                      <span class="old" v-show="food.oldPrice">￥{{ food.oldPrice }}</span>
+                    </div>
+                    <div class="cartcontrol-wrapper">
+                      <cart-control :food="food"/>
+                    </div>
+                  </section>
+                </div>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <!--底部购物车-->
+      <seller-cart/>
+    </div>
+    <seller-food ref="food" :food="food"/>
+
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import CartControl from '@/components/CartControl/CartControl'
+import SellerFood from '@/components/SellerFood/SellerFood'
+import SellerCart from '@/components/SellerCart/SellerCart'
 import { mapState } from 'vuex'
 export default {
   data () {
     return {
       scrollY: 0, // 右侧滑动的y轴坐标
-      tops: [] // 所有右侧分类li的top构成的数组
+      tops: [], // 所有右侧分类li的top构成的数组
+      food: {}, // 需要显示的food
+      isShow: false
     }
   },
   mounted () {
@@ -121,10 +131,17 @@ export default {
     clickMenuItem (index) {
       this.scrollY = this.tops[index]
       this.foodsScroll.scrollTo(0, -this.scrollY, 500)
+    },
+    showFood (food) {
+      this.food = food
+      // 显示/隐藏food组件 父组件调用子组件的方法，使用ref
+      this.$refs.food.toggleShow()
     }
   },
   components: {
-    CartControl
+    CartControl,
+    SellerFood,
+    SellerCart
   }
 }
 </script>
@@ -137,7 +154,7 @@ export default {
   margin-top 1px
   width 100%
   position: absolute
-  top: 295px
+  top: 238px
   bottom: 46px
   background $bc-white-s
   overflow hidden
@@ -146,9 +163,12 @@ export default {
     width 80px
     background #f3f5f7
     .menu-item
+      box-sizing border-box
       display table
       padding 17.5px 7.5px
       line-height 14px
+      width 100%
+      bottom-border-1px(rgba(7, 17, 27, 0.1))
       &.current
         position relative
         z-index 12
@@ -159,7 +179,6 @@ export default {
       .text
         width: 56px
         vertical-align: middle
-        bottom-border-1px(rgba(7, 17, 27, 0.1))
         font-size: $font-size-small
         .icon
           display: inline-block
@@ -242,5 +261,4 @@ export default {
             right 4px
             top 0
             line-height 24px
-
 </style>

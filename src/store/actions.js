@@ -11,7 +11,8 @@ import {
   RECEIVE_SELLER_RATINGS,
   RECEIVE_SELLER_GOODS,
   INCREMENT_FOOD_COUNT,
-  DECREMENT_FOOD_COUNT
+  DECREMENT_FOOD_COUNT,
+  RESET_CART_LIST
 } from './mutation-types'
 import {
   reqAddress,
@@ -91,5 +92,9 @@ export default {
   updateFoodCount ({ commit }, { flag, food }) {
     flag === true && commit(INCREMENT_FOOD_COUNT, { food })
     flag === false && commit(DECREMENT_FOOD_COUNT, { food })
+  },
+  // 同步清空购物车的数量
+  emptyList ({ commit }, state) {
+    commit(RESET_CART_LIST)
   }
 }

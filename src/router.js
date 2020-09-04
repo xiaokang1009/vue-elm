@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MSite from '@/views/MSite/MSite'
-import Search from '@/views/Search/Search'
-import Personal from '@/views/Personal/Personal'
-import Order from '@/views/Order/Order'
+// import MSite from '@/views/MSite/MSite'
+// import Search from '@/views/Search/Search'
+// import Personal from '@/views/Personal/Personal'
+// import Order from '@/views/Order/Order'
 import Login from '@/views/Login/Login'
 import Seller from '@/views/Seller/Seller'
 import SellerGoods from '@/views/Seller/SellerGoods/SellerGoods'
@@ -19,7 +19,7 @@ export default new Router({
     // 首页路由
     {
       path: '/msite',
-      component: MSite,
+      component: () => import('./views/MSite/MSite'), // 路由懒加载
       meta: {
         showFooter: true
       }
@@ -27,7 +27,7 @@ export default new Router({
     // 搜索路由
     {
       path: '/search',
-      component: Search,
+      component: () => import('./views/Search/Search'),
       meta: {
         showFooter: true
       }
@@ -35,7 +35,7 @@ export default new Router({
     //  订单路由
     {
       path: '/order',
-      component: Order,
+      component: () => import('./views/Order/Order'),
       meta: {
         showFooter: true
       }
@@ -43,7 +43,7 @@ export default new Router({
     //  个人中心路由
     {
       path: '/personal',
-      component: Personal,
+      component: () => import('./views/Personal/Personal'),
       meta: {
         showFooter: true
       }

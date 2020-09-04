@@ -20,3 +20,5 @@ export const RECEIVE_SELLER_INFO = 'receive_seller_info' // 接受商家详情�
 export const INCREMENT_FOOD_COUNT = 'increment_food_count' // 增加商品数量
 
 export const DECREMENT_FOOD_COUNT = 'decrement_food_count' // 减小商品数量
+
+export const RESET_CART_LIST = 'reset_cart_list' // 清空购物车的商品

@@ -12,7 +12,8 @@ import {
   RECEIVE_SELLER_INFO,
   RECEIVE_SELLER_RATINGS,
   DECREMENT_FOOD_COUNT,
-  INCREMENT_FOOD_COUNT
+  INCREMENT_FOOD_COUNT,
+  RESET_CART_LIST
 } from './mutation-types'
 
 export default {
@@ -60,6 +61,7 @@ export default {
   [INCREMENT_FOOD_COUNT] (state, { food }) {
     if (!food.count) {
       Vue.set(food, 'count', 1)
+      state.cartFoods.push(food) // 把food添加到购物车列表中
     } else {
       food.count++
     }
@@ -68,5 +70,14 @@ export default {
   // 减少商品数量
   [DECREMENT_FOOD_COUNT] (state, { food }) {
     food.count && food.count--
+    food.count === 0 && state.cartFoods.splice(state.cartFoods.indexOf(food), 1)
+  },
+
+  // 清空购物车
+  [RESET_CART_LIST] (state) {
+    // 先清除购物车中food.count属性
+    // eslint-disable-next-line no-return-assign
+    state.cartFoods.forEach(food => food.count = 0)
+    state.cartFoods = []
   }
 }
