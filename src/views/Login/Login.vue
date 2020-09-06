@@ -15,7 +15,7 @@
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
               <button :disabled="!phoneRight" class="get-verification"
                       :style="phoneRight?'color:black':''" @click.prevent="getCode">
-                {{ sendTime >= 0 ? `${sendTime}s后重新发送` : '获取验证码' }}
+                {{ sendTime > 0 ? `${sendTime}s后重新发送` : '获取验证码' }}
               </button>
             </section>
             <section class="login-verification">
@@ -62,7 +62,7 @@ export default {
   data () {
     return {
       loginType: true, // 使用手机验证码登录 还是密码登录
-      sendTime: -1, // 计时的时间，默认为-1，当倒计时小于0然后再显示发送验证码
+      sendTime: 0, // 计时的时间，默认为0，当倒计时等于0然后再显示发送验证码
       showType: 'password', // 密码框的type属性默认为password，可以改变为text
       flag: false, // 显示密码和隐藏密码的标志
       pwd: '', // 密码
@@ -85,11 +85,11 @@ export default {
     },
     //  异步获取验证码
     async getCode () {
-      if (!this.sendTime <= 0) {
+      if (!this.sendTime) {
         //  显示倒计时
         this.sendTime = 60
         this.intervalId = setInterval(() => {
-          this.sendTime < 0 && clearInterval(this.intervalId)
+          this.sendTime <= 0 && clearInterval(this.intervalId)
           this.sendTime--
         }, 1000)
         //  发送ajax请求
